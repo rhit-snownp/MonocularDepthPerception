@@ -1,3 +1,6 @@
+
+function [lgraph] = pipeline1()
+
 %read in the data 
 lgraph = layerGraph;
 
@@ -66,3 +69,5 @@ plot(lgraph)
 
 figure
 plot(lgraph)
+
+end
