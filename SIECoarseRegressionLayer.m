@@ -1,8 +1,8 @@
-classdef SIERegressionLayer < nnet.layer.RegressionLayer
+classdef SIECoarseRegressionLayer < nnet.layer.RegressionLayer
     % Scale-Invariant Error
     
     methods
-        function layer = SIERegressionLayer(name)
+        function layer = SIECoarseRegressionLayer(name)
             % Set layer name.
             layer.Name = name;
 
@@ -16,7 +16,7 @@ classdef SIERegressionLayer < nnet.layer.RegressionLayer
 
             % T has dimensions height x width x channels (1) x N 
             % N is minibatch size
-            
+            T = imresize(T,[74,55,1]);
             nPixels = sum(T(:,:,1,1),'all');
             alpha = ones(size( T(:,:,1,:) )).*(sum(log(T(:,:,1,:)) - log(Y),[1,2])/nPixels);
             sumLoss = sum((log(Y) - log(T(:,:,1,:)) + alpha).^2,'all');

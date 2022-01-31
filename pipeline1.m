@@ -32,9 +32,9 @@ coarseNetwork = [
     %not positive on the output size of this one. maybe jsut the dimensions
     %of the actual input image trimmed down, since it looks like that in
     %the paper
-    fullyConnectedLayer(4070,'Name','FC 2')
-    reshapeLayer('reshape 1', 4070, [74,55])
-    ]
+    fullyConnectedLayer(4332,'Name','FC 2')
+    reshapeLayer('reshape 1', 4332, [76,57])
+    ];
     
 lgraph = addLayers(lgraph,coarseNetwork);
 
@@ -45,11 +45,11 @@ fineNetworkPart1 = [
     convolution2dLayer([9 9],63,'Stride',[4 4],'Name','Fine 1')
     reluLayer("Name",'relu fine 1')
     maxPooling2dLayer([2 2],'Name','Pool Fine', 'Padding','same')
-    ]
+    ];
 
 lgraph = addLayers(lgraph,fineNetworkPart1);
 
-concat = depthConcatenationLayer(2,'Name','Fine 2, Concat')
+concat = depthConcatenationLayer(2,'Name','Fine 2, Concat');
 lgraph = addLayers(lgraph,concat);
 
 lgraph = connectLayers(lgraph,'reshape 1','Fine 2, Concat/in1');
@@ -64,12 +64,12 @@ fineNetworkPart2 = [
     %If we said that the depth/how many filters you have is the "64"/ the
     %arrow number, then what is it for the concatenation layer?
     SIERegressionLayer("Scale-Invarient Error")
-]
+];
 lgraph = addLayers(lgraph,fineNetworkPart2);
 
 lgraph = connectLayers(lgraph,'Fine 2, Concat','Fine 3');
 % plot(lgraph)
 
 
-figure
-plot(lgraph)
+% figure
+% plot(lgraph)
