@@ -10,17 +10,19 @@ coarseNetwork = [
     %coarse 1 
     convolution2dLayer([11 11],96,'Stride',[4 4],'Name','coarse 1')
     reluLayer("Name",'relu 1')
-    maxPooling2dLayer([2 2],'Name','Pool 1')
+    maxPooling2dLayer([2 2],'Name','Pool 1','Stride',[2,2])
     %coarse 2 
     convolution2dLayer([5 5],256,'Name','coarse 2')
     reluLayer("Name",'relu 2')
-    maxPooling2dLayer([2 2],'Name','Pool 2')
+    maxPooling2dLayer([2 2],'Name','Pool 2','Stride',[2,2])
     %coarse 3
     convolution2dLayer([3 3],384,'Name','coarse 3')
     reluLayer("Name",'relu 3')
+%     maxPooling2dLayer([2 2],'Name','Pool 3','Stride',[2,2])
     %coarse 4 
     convolution2dLayer([3 3],384,'Name','coarse 4')
     reluLayer("Name",'relu 4')
+%     maxPooling2dLayer([2 2],'Name','Pool 4','Stride',[2,2])
     %coarse 5 
     convolution2dLayer([3 3],256,'Name','coarse 5')
     reluLayer("Name",'relu 5')
@@ -37,10 +39,12 @@ coarseNetwork = [
 lgraph = addLayers(lgraph,coarseNetwork);
 
 fineNetworkPart1 = [
+    %input 2
+    imageInputLayer([304 228],'Name','input 2') 
     %Fine 1
     convolution2dLayer([9 9],63,'Stride',[4 4],'Name','Fine 1')
     reluLayer("Name",'relu fine 1')
-    maxPooling2dLayer([2 2],'Name','Pool Fine')
+    maxPooling2dLayer([2 2],'Name','Pool Fine', 'Padding','same')
     ]
 
 lgraph = addLayers(lgraph,fineNetworkPart1);
@@ -64,10 +68,8 @@ fineNetworkPart2 = [
 lgraph = addLayers(lgraph,fineNetworkPart2);
 
 lgraph = connectLayers(lgraph,'Fine 2, Concat','Fine 3');
-plot(lgraph)
+% plot(lgraph)
 
 
 figure
 plot(lgraph)
-
-end
