@@ -5,6 +5,8 @@ function loss = forwardLoss(Y, T)
             % T has dimensions height x width x channels (1) x N 
             % N is minibatch size
             
+            T = T + 1e-7; %dont get Nan
+            
             nPixels = sum(T(:,:,1,1),'all');
             alpha = ones(size(T, [1,2])).*(sum(log(abs(T)) - log(abs(Y)), [1,2])/nPixels);
             sumLoss = sum((log(abs(Y)) - log(abs(T(:,:,1,:))) + alpha).^2,'all');
