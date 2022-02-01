@@ -18,8 +18,8 @@ classdef SIERegressionLayer < nnet.layer.RegressionLayer
             % N is minibatch size
             
             nPixels = sum(T(:,:,1,1),'all');
-            alpha = ones(size( T(:,:,1,:) )).*(sum(log(T(:,:,1,:)) - log(Y),[1,2])/nPixels);
-            sumLoss = sum((log(Y) - log(T(:,:,1,:)) + alpha).^2,'all');
+            alpha = ones(size( T(:,:,1,:) )).*(sum(log(abs(T(:,:,1,:))) - log(abs(Y)),[1,2])/nPixels);
+            sumLoss = sum((log(abs(Y)) - log(abs(T(:,:,1,:))) + alpha).^2,'all');
     
             % Take mean over mini-batch.
             N = size(Y,4);

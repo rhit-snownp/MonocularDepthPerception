@@ -1,0 +1,33 @@
+function [trainCombined, valCombined] = ReadDIODEToDatastore(relativePath)
+    inputDataImages = imageDatastore(relativePath,"IncludeSubfolders",true);
+    augDataImages = augmentedImageDatastore([304, 228], inputDataImages);
+    inputDataDepths = imageDatastore(relativePath, 'ReadFcn',@loadDIODEZDepth,'FileExtensions','.npy',"IncludeSubfolders",true);
+%     augDataDepths = augmentedImageDatastore([76,57], inputDataDepths);
+
+    n = length(inputDataDepths.Files);
+    idx = randperm(n,round(n/3));
+    valDataImages = partitionByIndex(augDataImages, idx);
+    valDataDepths
+    idx = setdiff(1:n,idx); %invert the indicies
+    trainDataImages = partitionByIndex(augDataImages, idx);
+    trainDataDepth = inputDataDepths;
+    trainDataDepth.Files = inputDataDepths.Files{idx};
+
+    % fixes a "known" issue with combining datastores acording to matlab...
+%     valDataImages = transform(valDataImages, @(x){x});
+%     valDataDepth = transform(valDataDepth, @(x){x});
+%     trainDataImages = transform(trainDataImages, @(x){x});
+%     trainDataDepth = transform(trainDataDepth, @(x){x});
+
+    trainCombined = combine(trainDataImages, trainDataDepth);
+    valCombined = combine(valDataImages, valDataDepth);
+
+    function data = loadDIODEZDepth(filename)
+        addpath npy-matlab\
+        data = readNPY(filename);
+%         depthMat(:,:,i) = data;
+%         data = repmat(data, [1,1,3]);
+        data = imresize(data,[76,57]);
+    end
+
+end

@@ -6,7 +6,7 @@ lgraph = layerGraph;
 
 coarseNetwork = [
     %input 
-    imageInputLayer([304 228],'Name','input')  
+    imageInputLayer([304 228 3],'Name','input')  
     %coarse 1 
     convolution2dLayer([11 11],96,'Stride',[4 4],'Name','coarse 1')
     reluLayer("Name",'relu 1')
@@ -24,7 +24,7 @@ coarseNetwork = [
     reluLayer("Name",'relu 4')
 %     maxPooling2dLayer([2 2],'Name','Pool 4','Stride',[2,2])
     %coarse 5 
-    convolution2dLayer([3 3],256,'Name','coarse 5')
+    convolution2dLayer([3 3], 256,'Name','coarse 5')
     reluLayer("Name",'relu 5')
     %FC 1 
     fullyConnectedLayer(4096,'Name','FC 1')
@@ -33,7 +33,7 @@ coarseNetwork = [
     %of the actual input image trimmed down, since it looks like that in
     %the paper
     fullyConnectedLayer(4332,'Name','FC 2')
-    reshapeLayer('reshape 1', 4332, [76,57])
+    reshapeLayer('reshape 1')
     ];
     
 lgraph = addLayers(lgraph,coarseNetwork);
