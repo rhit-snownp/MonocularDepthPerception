@@ -6,7 +6,7 @@ close all
 
 
 %Load in the NYU Depth Dataset
-load('NYU Dataset\nyu_depth_v2_labeled.mat')
+%load('NYU Dataset\nyu_depth_v2_labeled.mat')
 
 %%
 % % trainX = images(:,:,:,1:round(1449/2));
@@ -39,10 +39,8 @@ dsTrain = combine(augmentedTrainX,augmentedTrainY);
 
 
 
-analyze(layers)
-
 [layers] = pipeline1();
-
+%analyzeNetwork(layers)
 
 options = trainingOptions('sgdm', ...
     'MiniBatchSize',128, ...
@@ -54,5 +52,5 @@ options = trainingOptions('sgdm', ...
     'Shuffle','every-epoch', ...
     'Plots','training-progress', ...
     'Verbose',false);
-%%
+
 net = trainNetwork(dsTrain,layers,options);
