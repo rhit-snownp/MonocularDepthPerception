@@ -62,7 +62,7 @@ fineNetworkPart2 = [
     convolution2dLayer([5 5],64,'Name','Fine 3','Padding',2)
     reluLayer("Name",'relu fine 3')
     %Fine 4
-    convolution2dLayer([5 5],64,'Name','Fine 4','Padding',2)
+    convolution2dLayer([5 5],1,'Name','Fine 4','Padding',2)
     %If we said that the depth/how many filters you have is the "64"/ the
     %arrow number, then what is it for the concatenation layer?
     SIERegressionLayer("Scale-Invarient Error")

@@ -18,8 +18,9 @@ close all
 
 trainX = imageDatastore("NYU Dataset/Training Data/Input/",'LabelSource','foldernames',"ReadFcn", @loadImage);
 trainY = imageDatastore("NYU Dataset/Training Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadImage);
+trainYlowRES = imageDatastore("NYU Dataset/Training Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadDepthImage);
 testX = imageDatastore("NYU Dataset/Testing Data/Input/",'LabelSource','foldernames',"ReadFcn", @loadImage);
-testY = imageDatastore("NYU Dataset/Testing Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadImage);
+testY = imageDatastore("NYU Dataset/Testing Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadDepthImage);
 
 
 
@@ -38,7 +39,7 @@ augmentedTrainX = augmentedImageDatastore(imageSize,trainX,'ColorPreprocessing',
 augmentedTrainY = augmentedImageDatastore(imageSize,trainY);
 
 %dsTrain = combine(augmentedTrainX,augmentedTrainX,augmentedTrainY);
-dsTrain = combine(trainX,trainY,trainY);
+dsTrain = combine(trainX,trainY,trainYlowRES);
 
 
 
@@ -63,5 +64,10 @@ net = trainNetwork(dsTrain,layers,options);
 function data = loadImage(filename)
         im = imread(filename);
         data = imresize(im, [304, 228]);
+end
+
+function data = loadDepthImage(filename)
+        im = imread(filename);
+        data = imresize(im, [76, 57]);
 end
 
