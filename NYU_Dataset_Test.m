@@ -1,5 +1,5 @@
 clc
-clear all
+clear
 close all
 
 %Test Training of Pipeline 1 on NYU Depth Dataset
@@ -16,10 +16,12 @@ close all
 % newTrainY = repmat(reshape(trainY, size(trainY,1), size(trainY,2), 1, size(trainY,3)), 1, 1, 3, 1);
 % newTestY = repmat(reshape(testY, size(testY,1), size(testY,2), 1, size(testY,3)), 1, 1, 3, 1);
 
-trainX = imageDatastore("NYU Dataset/Training Data/Input/",'LabelSource','foldernames');
-trainY = imageDatastore("NYU Dataset/Training Data/Output/",'LabelSource','foldernames');
-testX = imageDatastore("NYU Dataset/Testing Data/Input/",'LabelSource','foldernames');
-testY = imageDatastore("NYU Dataset/Testing Data/Output/",'LabelSource','foldernames');
+trainX = imageDatastore("NYU Dataset/Training Data/Input/",'LabelSource','foldernames',"ReadFcn", @loadImage);
+trainY = imageDatastore("NYU Dataset/Training Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadImage);
+testX = imageDatastore("NYU Dataset/Testing Data/Input/",'LabelSource','foldernames',"ReadFcn", @loadImage);
+testY = imageDatastore("NYU Dataset/Testing Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadImage);
+
+
 
 
 
@@ -35,12 +37,13 @@ imageSize = uint8([304 228 1]);
 augmentedTrainX = augmentedImageDatastore(imageSize,trainX,'ColorPreprocessing','rgb2gray');
 augmentedTrainY = augmentedImageDatastore(imageSize,trainY);
 
-dsTrain = combine(augmentedTrainX,augmentedTrainY);
+%dsTrain = combine(augmentedTrainX,augmentedTrainX,augmentedTrainY);
+dsTrain = combine(trainX,trainY,trainY);
 
 
 
 [layers] = pipeline1();
-%analyzeNetwork(layers)
+analyzeNetwork(layers)
 
 options = trainingOptions('sgdm', ...
     'MiniBatchSize',128, ...
@@ -54,3 +57,11 @@ options = trainingOptions('sgdm', ...
     'Verbose',false);
 
 net = trainNetwork(dsTrain,layers,options);
+
+
+
+function data = loadImage(filename)
+        im = imread(filename);
+        data = imresize(im, [304, 228]);
+end
+
