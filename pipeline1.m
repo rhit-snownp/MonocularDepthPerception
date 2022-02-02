@@ -28,11 +28,13 @@ coarseNetwork = [
     reluLayer("Name",'relu 5')
     %FC 1 
     fullyConnectedLayer(4096,'Name','FC 1')
+    reluLayer("Name", 'relu 6')
     %FC 2 
     %not positive on the output size of this one. maybe jsut the dimensions
     %of the actual input image trimmed down, since it looks like that in
     %the paper
     fullyConnectedLayer(4332,'Name','FC 2')
+    reluLayer("Name", 'relu 7')
     reshapeLayer('reshape 1')
     ];
     

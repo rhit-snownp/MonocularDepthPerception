@@ -33,7 +33,7 @@ function [trainCombined, valCombined] = ReadDIODEToDatastore(relativePath)
 
     function data = loadImage(filename)
         im = imread(filename);
-        data = imresize(im, [304, 228]);
+        data = imresize(im, [304 228]);
     end
 
 end
