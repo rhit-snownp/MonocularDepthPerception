@@ -26,8 +26,6 @@ function [trainCombined, valCombined] = ReadDIODEToDatastore(relativePath)
     function data = loadDIODEZDepth(filename)
         addpath npy-matlab\
         data = readNPY(filename);
-%         depthMat(:,:,i) = data;
-%         data = repmat(data, [1,1,3]);
         data = imresize(data,[76,57]);
     end
 

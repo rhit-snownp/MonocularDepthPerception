@@ -34,7 +34,7 @@ coarseNetwork = [
     %of the actual input image trimmed down, since it looks like that in
     %the paper
     fullyConnectedLayer(4332,'Name','FC 2')
-    reluLayer("Name", 'relu 7')
+%     reluLayer("Name", 'relu 7')
     reshapeLayer('reshape 1')
     ];
     

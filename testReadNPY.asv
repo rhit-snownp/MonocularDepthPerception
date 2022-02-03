@@ -1,0 +1,6 @@
+addpath npy-matlab\
+im
+a = readNPY("images/train/indoors/scene_00000/scan_00001");
+a = normalize(a);
+imshow(a)
+

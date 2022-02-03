@@ -1,5 +1,6 @@
 addpath npy-matlab\
-a = readNPY("train/indoors/scene_00000/scan_00001/00000_00001_indoors_060_000_depth.npy");
-a = normalize(a);
+% imread("images/test/indoors/scene_00019/scan_00183/00019_00183_indoors_000_010_depth.npy")
+a = readNPY("images/test/indoors/scene_00019/scan_00183/00019_00183_indoors_000_010_depth.npy");
+% a = normalize(a);
 imshow(a)
 
