@@ -41,15 +41,16 @@ coarseNetwork = [
 lgraph = addLayers(lgraph,coarseNetwork);
 
 fineNetworkPart1 = [
-    %input 2
-    imageInputLayer([304 228],'Name','input 2') 
     %Fine 1
     convolution2dLayer([9 9],63,'Stride',[4 4],'Name','Fine 1','Padding',3)
     reluLayer("Name",'relu fine 1')
     maxPooling2dLayer([2 2],'Name','Pool Fine', 'Padding','same')
     ];
 
+
+
 lgraph = addLayers(lgraph,fineNetworkPart1);
+lgraph = connectLayers(lgraph,'input', 'Fine 1');
 
 concat = depthConcatenationLayer(2,'Name','Fine 2, Concat');
 lgraph = addLayers(lgraph,concat);
@@ -62,7 +63,7 @@ fineNetworkPart2 = [
     convolution2dLayer([5 5],64,'Name','Fine 3','Padding',2)
     reluLayer("Name",'relu fine 3')
     %Fine 4
-    convolution2dLayer([5 5],64,'Name','Fine 4','Padding',2)
+    convolution2dLayer([5 5],1,'Name','Fine 4','Padding',2)
     %If we said that the depth/how many filters you have is the "64"/ the
     %arrow number, then what is it for the concatenation layer?
     SIERegressionLayer("Scale-Invarient Error")
@@ -70,6 +71,7 @@ fineNetworkPart2 = [
 lgraph = addLayers(lgraph,fineNetworkPart2);
 
 lgraph = connectLayers(lgraph,'Fine 2, Concat','Fine 3');
+
 % plot(lgraph)
 
 
