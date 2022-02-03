@@ -17,15 +17,30 @@ close all
 % newTestY = repmat(reshape(testY, size(testY,1), size(testY,2), 1, size(testY,3)), 1, 1, 3, 1);
 
 trainX = imageDatastore("NYU Dataset/Training Data/Input/",'LabelSource','foldernames',"ReadFcn", @loadImage);
-trainY = imageDatastore("NYU Dataset/Training Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadDepthImage);
+trainY = imageDatastore("NYU Dataset/Training Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadImage);
+trainYlowRES = imageDatastore("NYU Dataset/Training Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadDepthImage);
 testX = imageDatastore("NYU Dataset/Testing Data/Input/",'LabelSource','foldernames',"ReadFcn", @loadImage);
 testY = imageDatastore("NYU Dataset/Testing Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadDepthImage);
 
 
 
 
-dsTrain = combine(trainX,trainY);
-dsTest = combine(testX,testY);
+
+
+%Rescale input data to 304x228x1
+% imageSize = uint8([304 228 1]);
+% augmentedTrainImages = augmentedImageDatastore(imageSize,trainX,trainY,'ColorPreprocessing','rgb2gray');
+% augmentedTestImages = augmentedImageDatastore(imageSize,testX,testY,'ColorPreprocessing','rgb2gray');
+%Load in the defined Pipeline 1 Network Architecture
+
+
+imageSize = uint8([304 228 1]);
+augmentedTrainX = augmentedImageDatastore(imageSize,trainX,'ColorPreprocessing','rgb2gray');
+augmentedTrainY = augmentedImageDatastore(imageSize,trainY);
+
+%dsTrain = combine(augmentedTrainX,augmentedTrainX,augmentedTrainY);
+dsTrain = combine(trainX,trainY,trainYlowRES);
+
 
 
 [layers] = pipeline1();
@@ -45,9 +60,10 @@ options = trainingOptions('sgdm', ...
 net = trainNetwork(dsTrain,layers,options);
 
 
+%%
 
 
-YPred = predict(net,dsTest);
+
 
 
 
