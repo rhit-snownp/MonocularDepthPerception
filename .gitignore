@@ -5,3 +5,17 @@ DIODE Dataset/
 NYU Dataset/Testing Data
 NYU Dataset/Training Data
 TrainedNetwork1.mat
+ExistingPaperNeuralNet/weights/depth/params-conv_s2_1.pk
+ExistingPaperNeuralNet/weights/depth/params-conv_s2_2.pk
+ExistingPaperNeuralNet/weights/depth/params-conv_s2_3.pk
+ExistingPaperNeuralNet/weights/depth/params-full1.pk
+ExistingPaperNeuralNet/weights/depth/params-full2.pk
+ExistingPaperNeuralNet/weights/depth/params-imnet_conv1.pk
+ExistingPaperNeuralNet/weights/depth/params-imnet_conv2.pk
+ExistingPaperNeuralNet/weights/depth/params-imnet_conv3.pk
+ExistingPaperNeuralNet/weights/depth/params-imnet_conv4.pk
+ExistingPaperNeuralNet/weights/depth/params-imnet_conv5.pk
+ExistingPaperNeuralNet/weights/depth/params-imnet_pool1.pk
+ExistingPaperNeuralNet/weights/depth/params-imnet_pool2.pk
+ExistingPaperNeuralNet/weights/depth/params-imnet_pool5.pk
+ExistingPaperNeuralNet/weights/depth/params-pool_s2_1.pk
