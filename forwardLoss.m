@@ -1,18 +1,14 @@
 function loss = forwardLoss(Y, T)
-            % loss = forwardLoss(layer, Y, T) returns the SIE loss between
-            % the predictions Y and the training targets T.
-
-            % T has dimensions height x width x channels (1) x N 
-            % N is minibatch size
             batchSize = size(T,4);
-            idx = T>0;
+%             di = Y - log(abs(T));
+            di = log(abs(T)) - Y;
+            di(T==0) = 0;
+            n = size(T,1)*size(T,2)*ones(1,1,1,batchSize);
             for i=1:batchSize
-                di = Yi(idx) - log(abs(Ti(idx)));
-                n = length(di);
-                di2 = di.^2;
-                first_term = sum(di2)/n;
-                second_term = 0.5*(sum(di).^2)/n^2;
-                loss_vec(i) = first_term - second_term;
-                loss = mean(loss_vec);
+                n(1,:,1,i) = n(1,:,1,i) - sum(di(:,:,1,i)==0,"all");
             end
-end
+            di2 = di.^2;
+            first_term = sum(di2,[1,2,3])./n;
+            second_term = 0.5*(sum(di,[1,2,3]).^2)./(n.^2);
+            loss = mean(first_term - second_term);
+        end

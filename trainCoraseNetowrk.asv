@@ -4,27 +4,23 @@ clc; close all; clear variables;
 %%
 % lgraph = pipeline1();
 % inputSize = lgraph.Layers(1).InputSize;
-% coarseGraph = lgraph.Layers(1:18);
+% coarseGraph = lgraph.Layers(1:17);
 a = alexnet;
 alexnetTransfer = a.Layers(1:end-3);
-% layers = [ alexnetTransfer
-%             fullyConnectedLayer(4332,'Name','FC 2')
-%             reluLayer("Name", 'relu 7')
-%             reshapeLayer('reshape 1')
-%           SIERegressionLayer("SIE")];
-
-layers = [ alexnetTransfer
-            fullyConnectedLayer(4332,'Name','FC 2')
-            reluLayer("Name", 'relu 7')
-            reshapeLayer('reshape 1')
+layers = [alexnetTransfer
+          fullyConnectedLayer(3249,'Name','FC 2')
+          reshapeLayer('reshape 1')
           SIERegressionLayer("SIE")];
+
+% layers = [ coarseGraph
+%           SIERegressionLayer("SIE")];
 %%
 %     'ValidationData', valCombined, ...
 %     'ValidationFrequency',3, ...
-options = trainingOptions("sgdm", ...
+options = trainingOptions("adam", ...
     'MiniBatchSize',32, ...
-    'MaxEpochs',15, ...
-    'InitialLearnRate',1e-4, ...
+    'MaxEpochs',20, ...
+    'InitialLearnRate',1e-3, ...
     'Shuffle','every-epoch', ...
     'ValidationData', valCombined, ...
     'ValidationFrequency',50, ...
@@ -32,3 +28,5 @@ options = trainingOptions("sgdm", ...
     'Plots','training-progress');
 
 net = trainNetwork(trainCombined,layers,options);
+
+%% 
