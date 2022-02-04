@@ -2,6 +2,7 @@ function [trainCombined, valCombined] = ReadDIODEforFineTraining(relativePath)
     inputDataImages = imageDatastore(relativePath,"ReadFcn", @loadImage,"IncludeSubfolders",true);
     inputDataDepths = imageDatastore(relativePath, 'ReadFcn',@loadDIODEZDepthBlur,'FileExtensions','.npy',"IncludeSubfolders",true);
     outputDataDepths = imageDatastore(relativePath, 'ReadFcn',@loadDIODEZDepth,'FileExtensions','.npy',"IncludeSubfolders",true);
+    
 
 
     n = length(outputDataDepths.Files);
@@ -17,8 +18,8 @@ function [trainCombined, valCombined] = ReadDIODEforFineTraining(relativePath)
     trainOutputDataDepths = subset(outputDataDepths, idx);
 
 
-    trainCombined = combine(trainDataImages, trainDataDepths,valOutputDataDepths);
-    valCombined = combine(valDataImages, valDataDepths,trainOutputDataDepths);
+    trainCombined = combine(trainDataImages, trainDataDepths,trainOutputDataDepths);
+    valCombined = combine(valDataImages, valDataDepths,valOutputDataDepths);
 
     function data = loadDIODEZDepth(filename)
         addpath npy-matlab\
