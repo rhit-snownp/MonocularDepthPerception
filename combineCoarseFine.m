@@ -1,0 +1,26 @@
+clc; clear variables; close all;
+
+[trainCombined, valCombined] = ReadDIODEforCombined("images\train\indoors\");
+
+load('Fine Network 3.mat');
+load('coarseNet.mat');
+
+lgraph = layerGraph;
+
+lgraph = addLayers(lgraph, coarseNet.Layers(1:end-1));
+lgraph = addLayers(lgraph, net.Layers(1:8));
+%%
+lgraph = connectLayers(lgraph, 'input', 'Fine 1');
+lgraph = connectLayers(lgraph, 'reshape 1', 'Fine 2, Concat/in2');
+%%
+options = trainingOptions("adam", ...
+    'MiniBatchSize',32, ...
+    'MaxEpochs',6, ...
+    'InitialLearnRate',1e-4, ...
+    'Shuffle','every-epoch', ...
+    'ValidationData', valCombined, ...
+    'ValidationFrequency',50, ...
+    'Verbose', false, ...
+    'Plots','training-progress');
+
+net = trainNetwork(trainCombined,lgraph,options);

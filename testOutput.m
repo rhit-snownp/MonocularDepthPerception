@@ -1,13 +1,27 @@
 clc; close all; clear variables; 
 %%
+load("combinedNet.mat");
 testCombined = ReadTestData("images\test");
-%%
-images = testCombined.read();
-inputImg = images{1};
-% inputImg = ones([227 227 3]);
-out = exp(predict(net, inputImg));
-scaledOutput = uint8(interp1([min(min(out)), max(max(out))], [0,255],out));
-imshow(imtile({imresize(scaledOutput,6),imresize(inputImg,6)}));
+
+%% Calculate threshold metric
+out = exp(predict(combinedNet, testCombined));
+target_depth_cells = readall(testCombined.UnderlyingDatastores{2});
+test_data_length = length(target_depth_cells);
+target_depths = reshape(cat(3,target_depth_cells{:}),[76 57 1 test_data_length]);
+%% 
+sigma_125 = calculate_threshold_metric(out, target_depths, 1.25)
+sigma_125_2 = calculate_threshold_metric(out, target_depths, 1.25^2)
+sigma_125_3 = calculate_threshold_metric(out, target_depths, 1.25^3)
+
+%% Test individual images
+
+% images = testCombined.read();
+% inputImg = images{1};
+% % inputImg = ones([227 227 3]);
+% out = exp(predict(combinedNet, inputImg));
+% subplot(2,2,3); imshow(inputImg);
+% subplot(2,2,2); imagesc(out); title("output depthmap");colorbar;axis equal;
+% subplot(2,2,1); imagesc(images{2}); title("ground truth");colorbar; axis equal;
 
 
 function [testCombined] = ReadTestData(relativePath)
