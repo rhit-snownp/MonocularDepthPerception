@@ -34,10 +34,17 @@ function [trainCombined, valCombined] = ReadDIODEforFineTraining(relativePath)
 
 function data = loadDIODEZDepthBlur(filename)
         addpath npy-matlab\
-        data = readNPY(filename);
-        data = imresize(data,[76,57]);
-        %Blur the image output so we can train a result to upscale it
-        data = imgaussfilt(data,2);
+        readdata = readNPY(filename);
+        
+       %Use bilinear upscaleing 8x to make a much more fuzzy input image of
+       %the depth
+        scale = 8;
+        downscaledData = imresize(readdata, 1/scale);
+        poorlyUpscaledDate = imresize(downscaledData,scale);
+        data = imresize(poorlyUpscaledDate,[76,57]);
+        
+        %Gaussian blur for good measure
+        data = imgaussfilt(data);
     end
 
 end
