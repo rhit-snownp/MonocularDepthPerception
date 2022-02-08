@@ -62,6 +62,7 @@ YPred = squeeze(predict(net,valCombined));
 
 %%
 save('Fine Network 5','net');
+%%
 limit = 10;
 for index = 1:limit
 
