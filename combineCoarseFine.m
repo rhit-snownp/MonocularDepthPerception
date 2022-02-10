@@ -25,21 +25,24 @@ options = trainingOptions("adam", ...
     'Plots','training-progress');
 
 net = trainNetwork(trainCombined,lgraph,options);
-save("Combined Network 1",'net');
+
+
+
+save("coarseNet3.mat",'net');
 
 
 %%
-limit = 10;
-for index = 1:limit
-
-    inputImages = read(valCombined);
-    figure;
-    subplot(1,2,1);
-    imshow(inputImages{1});
-    title("Input Image");
-    subplot(1,2,2);
-
-    imagesc(inputImages{2});
-    title("Depth Image");
-    
-end
+% limit = 10;
+% for index = 1:limit
+% 
+%     inputImages = read(valCombined);
+%     figure;
+%     subplot(1,2,1);
+%     imshow(inputImages{1});
+%     title("Input Image");
+%     subplot(1,2,2);
+% 
+%     imagesc(inputImages{2});
+%     title("Depth Image");
+%     
+% end

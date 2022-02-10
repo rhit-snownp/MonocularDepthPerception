@@ -21,5 +21,6 @@ ExistingPaperNeuralNet/weights/depth/params-imnet_pool5.pk
 ExistingPaperNeuralNet/weights/depth/params-pool_s2_1.pk
 combinedNet.mat
 coarseNet.mat
+coarseNet2.mat
 Coarse Network 1.mat
 Combined Network 1.mat
