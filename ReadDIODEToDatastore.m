@@ -14,14 +14,11 @@ function [trainCombined, valCombined] = ReadDIODEToDatastore(relativePath)
     trainDataImages = subset(inputDataImages, idx);
     trainDataDepths = subset(inputDataDepths, idx);
 
-    % fixes a "known" issue with combining datastores acording to matlab...
-%     valDataImages = transform(valDataImages, @(x){x});
-%     valDataDepths = transform(valDataDepths, @(x){x});
-%     trainDataImages = transform(trainDataImages, @(x){x});
-%     trainDataDepths = transform(trainDataDepths, @(x){x});
-
     trainCombined = combine(trainDataImages, trainDataDepths);
     valCombined = combine(valDataImages, valDataDepths);
+
+    trainCombined = transform(trainCombined, @imageRegressionAugmentationPipeline);
+    valCombined = transform(valCombined, @imageRegressionAugmentationPipeline);
 
     function data = loadDIODEZDepth(filename)
         addpath npy-matlab\
@@ -34,5 +31,34 @@ function [trainCombined, valCombined] = ReadDIODEToDatastore(relativePath)
         im = imgaussfilt(im,2);
         data = imresize(im, [304 228]);
     end
+
+    function dataOut = imageRegressionAugmentationPipeline(dataIn)
+    
+    dataOut = cell([size(dataIn,1),2]);
+    for i = 1:size(dataIn,1)
+        
+        % Resize images to 32-by-32 pixels and convert to data type single
+        inputImage = im2single(dataIn{i,1});
+        targetImage = dataIn{i,2};
+        
+        % Add salt and pepper noise
+%         inputImage = imnoise(inputImage,'salt & pepper');
+        
+        % Add randomized rotation and scale
+        tform = randomAffine2d('Scale',[0.9,1.1],'Rotation',[-10 10],'XReflection',true);
+        outputViewInput = affineOutputView(size(inputImage),tform);
+        outputViewTarget = affineOutputView(size(targetImage),tform);
+
+        % Use imwarp with the same tform and outputView to augment both images
+        % the same way
+        inputImageWarped = imwarp(inputImage,tform,'OutputView',outputViewInput);
+        targetImageWarped = imwarp(targetImage,tform,'OutputView',outputViewTarget);
+        
+%         dataOut(2*i-1,:) = {inputImageWarped,targetImageWarped};
+%         dataOut(2*i,:) = {inputImage,targetImage};
+        dataOut(i,:) = {inputImageWarped,targetImageWarped};
+    end
+
+end
 
 end

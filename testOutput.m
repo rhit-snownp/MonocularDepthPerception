@@ -15,7 +15,7 @@ sigma_125_3 = calculate_threshold_metric(out, target_depths, 1.25^3)
 
 %% Test individual images
 
-images = trainCombined.read();
+images = testCombined.read();
 inputImg = images{1};
 % inputImg = ones([227 227 3]);
 out = exp(predict(combinedNet, inputImg));
