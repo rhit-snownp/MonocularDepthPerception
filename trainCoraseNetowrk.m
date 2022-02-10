@@ -29,3 +29,4 @@ options = trainingOptions("adam", ...
 
 net = trainNetwork(trainCombined,layers,options);
 
+save("Coarse Network 1",'net');
