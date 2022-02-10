@@ -43,6 +43,28 @@ options = trainingOptions("adam", ...
     'Plots','training-progress');
 
 net = trainNetwork(trainCombined,lgraph,options);
-save("Combined Network 2",'net');
+save("Combined Network 2 - Fine Training On Coarse",'net');
+
+
+
+%%
+YPred = squeeze(predict(net,valCombined));
+
+
+limit = 10;
+for index = 1:limit
+
+    inputImages = read(valCombined);
+    figure;
+    subplot(2,2,1);
+    imshow(inputImages{1});
+    title("Input Image");
+    subplot(2,2,2);
+    imagesc(inputImages{2});
+    title("Depth Image");
+    subplot(2,2,3);
+    imagesc(YPred(:,:,index));
+    title("Output Depth Map");
+end
 
 
