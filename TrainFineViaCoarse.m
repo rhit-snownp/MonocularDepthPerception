@@ -13,9 +13,8 @@ clear variables;
 %Load in the preexisting and pretrained networks
 load('Fine Network 5.mat');
 fineNet = net;
-load('Coarse Network 1.mat');
+load('Transfer Learning Via Alexnet 2.mat');
 coarseNet = net;
-coarseNet.Layers(1:end-1);
 
 %%
 lgraph = layerGraph;
@@ -25,10 +24,13 @@ lgraph = addLayers(lgraph, fineNet.Layers(1:8));
 
 
 %%
-lgraph = connectLayers(lgraph, 'input', 'Fine 1');
-lgraph = connectLayers(lgraph, 'reshape 1', 'Fine 2, Concat/in2');
-analyzeNetwork(lgraph);
+% lgraph = connectLayers(lgraph, 'input', 'Fine 1');
+% lgraph = connectLayers(lgraph, 'reshape 1', 'Fine 2, Concat/in2');
 
+
+lgraph = connectLayers(lgraph, 'resize227', 'Fine 1');
+lgraph = connectLayers(lgraph, 'resize-output-size', 'Fine 2, Concat/in2');
+analyzeNetwork(lgraph);
 
 
 %%
@@ -43,7 +45,7 @@ options = trainingOptions("adam", ...
     'Plots','training-progress');
 
 net = trainNetwork(trainCombined,lgraph,options);
-save("Combined Network 2 - Fine Training On Coarse",'net');
+save("Combined Network 3 - Fine Training On Coarse Alexnet",'net');
 
 
 

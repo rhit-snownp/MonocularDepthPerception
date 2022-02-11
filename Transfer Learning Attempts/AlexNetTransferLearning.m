@@ -44,8 +44,8 @@ analyzeNetwork(lgraph);
 %%
 options = trainingOptions("adam", ...
     'MiniBatchSize',32, ...
-    'MaxEpochs',6, ...
-    'InitialLearnRate',1e-4, ...
+    'MaxEpochs',15, ...
+    'InitialLearnRate',1e-5, ...
     'Shuffle','every-epoch', ...
     'ValidationData', valCombined, ...
     'ValidationFrequency',50, ...
@@ -53,4 +53,26 @@ options = trainingOptions("adam", ...
     'Plots','training-progress');
 
 net = trainNetwork(trainCombined,lgraph,options);
-save("Transfer Learning Via Alexnet 1",'net');
+save("Transfer Learning Via Alexnet 2",'net');
+
+
+
+%%
+YPred = squeeze(predict(net,valCombined));
+
+
+limit = 10;
+for index = 1:limit
+
+    inputImages = read(valCombined);
+    figure;
+    subplot(2,2,1);
+    imshow(inputImages{1});
+    title("Input Image");
+    subplot(2,2,2);
+    imagesc(inputImages{2});
+    title("Depth Image");
+    subplot(2,2,3);
+    imagesc(YPred(:,:,index));
+    title("Output Depth Map");
+end
