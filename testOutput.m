@@ -1,11 +1,11 @@
 clc; close all; clear variables; 
 %%
-% load("combinedNet.mat");
+% load("coarseNet3.mat");
 testCombined = ReadTestData("images\test");
 
 %% Calculate threshold metric
-out = exp(predict(combinedNet, trainCombined));
-target_depth_cells = readall(trainCombined.UnderlyingDatastores{2});
+out = exp(predict(combinedNet, testCombined));
+target_depth_cells = readall(testCombined.UnderlyingDatastores{2});
 test_data_length = length(target_depth_cells);
 target_depths = reshape(cat(3,target_depth_cells{:}),[76 57 1 test_data_length]);
 %% 

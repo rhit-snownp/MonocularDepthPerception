@@ -4,7 +4,7 @@ clc; clear variables; close all;
 
 load('Fine Network 5.mat');
 fineNet = net;
-load('Coarse Network 1.mat');
+load('coarseNet3.mat');
 coarseNet = net;
 lgraph = layerGraph;
 

@@ -38,7 +38,7 @@ function [trainCombined, valCombined] = ReadDIODEToDatastore(relativePath)
     for i = 1:size(dataIn,1)
         
         % Resize images to 32-by-32 pixels and convert to data type single
-        inputImage = im2single(dataIn{i,1});
+        inputImage = dataIn{i,1};
         targetImage = dataIn{i,2};
         
         % Add salt and pepper noise
