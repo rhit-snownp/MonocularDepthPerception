@@ -58,9 +58,10 @@ save("Transfer Learning Via Alexnet 2",'net');
 
 
 %%
+load("Transfer Learning Via Alexnet 2.mat")
 YPred = squeeze(predict(net,valCombined));
 
-
+%%
 limit = 10;
 for index = 1:limit
 
