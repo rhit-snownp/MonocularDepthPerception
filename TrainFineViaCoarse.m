@@ -53,8 +53,10 @@ save("Combined Network 3 - Fine Training On Coarse Alexnet",'net');
 YPred = squeeze(predict(net,valCombined));
 
 
+%%
+
 limit = 10;
-for index = 1:limit
+for index = 20:limit
 
     inputImages = read(valCombined);
     figure;
