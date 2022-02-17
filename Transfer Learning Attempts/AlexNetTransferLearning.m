@@ -59,10 +59,13 @@ save("Transfer Learning Via Alexnet 2",'net');
 
 %%
 load("Transfer Learning Via Alexnet 2.mat")
+[trainCombined, valCombined] = ReadDIODEforCombined("..\images\train\indoors\");
+% testCombined = ReadTestData("images\test");
 YPred = squeeze(predict(net,valCombined));
 
 %%
-limit = 10;
+reset(valCombined)
+limit = 100;
 for index = 1:limit
 
     inputImages = read(valCombined);
@@ -73,7 +76,46 @@ for index = 1:limit
     subplot(2,2,2);
     imagesc(inputImages{2});
     title("Depth Image");
+
+    %Calculate the statistics on how good or bad the output image is:
+    exponentialResult = YPred(:,:,index);
+    groundTruth = inputImages{2};
+
+    sigma_125 = calculate_threshold_metric(exponentialResult, groundTruth, 1.25);
+    sigma_125_2 = calculate_threshold_metric(exponentialResult, groundTruth, 1.25^2);
+    sigma_125_3 = calculate_threshold_metric(exponentialResult, groundTruth, 1.25^3);
+
     subplot(2,2,3);
     imagesc(YPred(:,:,index));
-    title("Output Depth Map");
+    title({"Output Depth Map:", sprintf("\\sigma<1.25=%g3%%,  \\sigma<1.25^2=%g3%%, \\sigma<1.25^3=%g3%%",sigma_125*100,sigma_125_2*100,sigma_125_3*100)});
+end
+
+
+
+
+%% 
+
+
+
+
+
+function [testCombined] = ReadTestData(relativePath)
+    inputDataImages = imageDatastore(relativePath,"ReadFcn", @loadImage,"IncludeSubfolders",true);
+%     augDataImages = augmentedImageDatastore([304, 228], inputDataImages);
+    inputDataDepths = imageDatastore(relativePath, 'ReadFcn',@loadDIODEZDepth,'FileExtensions','.npy',"IncludeSubfolders",true);
+%     augDataDepths = augmentedImageDatastore([76,57], inputDataDepths);
+
+    testCombined = combine(inputDataImages, inputDataDepths);
+
+    function data = loadDIODEZDepth(filename)
+        addpath npy-matlab\
+        data = readNPY(filename);
+        data = imresize(data,[76,57]);
+    end
+
+    function data = loadImage(filename)
+        im = imread(filename);
+        im = imgaussfilt(im,2);
+        data = imresize(im, [304 228]);
+    end
 end
