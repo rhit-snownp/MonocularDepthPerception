@@ -2,7 +2,7 @@ clc; close all; clear variables;
 %%
 [trainCombined, valCombined] = ReadDIODEToDatastore("images\train\indoors\");
 %%
-lgraph = pipeline1();
+lgraph = pipeline2();
 inputSize = lgraph.Layers(1).InputSize;
 coarseGraph = lgraph.Layers(1:17);
 % a = alexnet;
@@ -26,7 +26,7 @@ options = trainingOptions("adam", ...
     'Plots','training-progress');
 
 net = trainNetwork(trainCombined,layers,options);
-
+%%
 options = trainingOptions("adam", ...
     'MiniBatchSize',32, ...
     'MaxEpochs',4, ...
@@ -41,5 +41,5 @@ for i=1:3
     [trainCombined, valCombined] = ReadDIODEToDatastore("images\train\indoors\");
     net = trainNetwork(trainCombined,net.layerGraph,options);
 end
-
-save("coarseNet3.mat",'net');
+% 
+% save("coarseNet3.mat",'net');

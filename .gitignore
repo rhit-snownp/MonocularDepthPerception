@@ -21,9 +21,11 @@ ExistingPaperNeuralNet/weights/depth/params-imnet_pool5.pk
 ExistingPaperNeuralNet/weights/depth/params-pool_s2_1.pk
 combinedNet.mat
 combinedNet2.mat
+combinedNet3.mat
 coarseNet.mat
 coarseNet2.mat
 coarseNet3.mat
+coarseNet4.mat
 Coarse Network 1.mat
 Combined Network 1.mat
 Transfer Learning Via Alexnet 1.mat

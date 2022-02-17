@@ -1,21 +1,15 @@
 clc; close all; clear variables; 
 %%
-load("combinedNet4.mat");
+load("combinedNet3.mat");
 testCombined = ReadTestData("images\test");
 
 %% Calculate threshold metric
 out = exp(predict(net, testCombined));
 target_depth_cells = readall(testCombined.UnderlyingDatastores{2});
 test_data_length = length(target_depth_cells);
-target_depths = reshape(cat(3,target_depth_cells{:}),[76 57 test_data_length]);
-out = squeeze(out);
-predictions = zeros(size(out));
+target_depths = reshape(cat(3,target_depth_cells{:}),[76 57 1 test_data_length]);
 
-for i=1:size(out,3)
-    p95 = prctile(reshape(target_depths(:,:,i),1,[]),95);
-    p5 = prctile(reshape(target_depths(:,:,i),1,[]),5);
-    predictions(:,:,i) = rescale(out(:,:,i), p5, p95);
-end
+predictions = s
 
 
 %% 

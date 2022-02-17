@@ -4,7 +4,7 @@ clc; clear variables; close all;
 
 load('Fine Network 5.mat');
 fineNet = net;
-load('coarseNet3.mat');
+load('coarseNet4.mat');
 coarseNet = net;
 lgraph = layerGraph;
 
@@ -25,7 +25,7 @@ options = trainingOptions("adam", ...
     'Plots','training-progress');
 
 net = trainNetwork(trainCombined,lgraph,options);
-save("Combined Network 1",'net');
+save("combinedNet3.mat",'net');
 YPred = squeeze(predict(net,valCombined));
 
 %%
@@ -49,8 +49,8 @@ end
 
 
 %% Calculate threshold metrics
-load("Combined Network 1")
-testCombined = ReadTestData("images\val");
+load("combinedNet3.mat")
+testCombined = ReadTestData("images\test");
 out = exp(predict(net, testCombined));
 target_depth_cells = readall(testCombined.UnderlyingDatastores{2});
 test_data_length = length(target_depth_cells);
