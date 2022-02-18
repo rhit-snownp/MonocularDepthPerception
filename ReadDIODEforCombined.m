@@ -1,9 +1,10 @@
+% reads data for training the combined network
 function [trainCombined, valCombined] = ReadDIODEforCombined(relativePath)
     inputDataImages = imageDatastore(relativePath,"ReadFcn", @loadImage,"IncludeSubfolders",true);
     outputDataDepths = imageDatastore(relativePath, 'ReadFcn',@loadDIODEZDepth,'FileExtensions','.npy',"IncludeSubfolders",true);
     
 
-
+    %Split up the images into train and validation sets (80/20 split)
     n = length(outputDataDepths.Files);
     idx = randperm(n,round(n/5));
 

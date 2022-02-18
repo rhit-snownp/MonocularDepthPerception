@@ -1,4 +1,4 @@
-
+%Utility file to view images in datastore
 clc; close all; clear variables; 
 
 [trainCombined, valCombined] = ReadDIODEToDatastore("images\train\indoors\");

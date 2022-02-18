@@ -5,6 +5,7 @@ clc;
 close all; 
 clear variables; 
 
+%Read in the training data
 [trainCombined, valCombined] = ReadDIODEforFineTraining("images\train\indoors\");
 
 
@@ -29,9 +30,7 @@ layers = addLayers(myGraph,fineLayers);
 layers = addLayers(layers,inputLayer);
 layers = addLayers(layers,SecondInputLayer);
 
-
-
-
+%Connect the layers
 layers = connectLayers(layers,'input','Fine 1');
 layers = connectLayers(layers,'coarseImageInput','Fine 2, Concat/in2');
 
@@ -39,7 +38,7 @@ layers = connectLayers(layers,'coarseImageInput','Fine 2, Concat/in2');
 
 
 analyzeNetwork(layers);
-%%
+%% Setup Training, and perform training
 %     'ValidationData', valCombined, ...
 %     'ValidationFrequency',3, ...
 options = trainingOptions("sgdm", ...
@@ -55,14 +54,10 @@ options = trainingOptions("sgdm", ...
 net = trainNetwork(trainCombined,layers,options);
 
 
-
-%%
-%load('Fine Network 1.mat')
+%% Show pretty pictures off of the validation set
 YPred = squeeze(predict(net,valCombined));
 
-%%
 save('Fine Network 5','net');
-%%
 limit = 10;
 for index = 1:limit
 

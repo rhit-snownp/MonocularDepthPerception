@@ -5,7 +5,7 @@ close all;
 
 load("nyu_depth_v2_labeled.mat");
 
-%% 
+%% Script to Extract NYU Depth Dataset V2 into PNG Images and PNG Depth Maps
 
 tic
 

@@ -1,3 +1,4 @@
+%% Function to freeze the weights of all layers in a network that are input
 function layers = freezeWeights(layers)
 % layers = freezeWeights(layers) sets the learning rates of all the
 % parameters of the layers in the layer array |layers| to zero.

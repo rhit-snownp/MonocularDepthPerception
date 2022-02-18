@@ -1,4 +1,4 @@
-
+%Returns the network graph
 function [lgraph] = pipeline1()
 
 %read in the data 

@@ -1,3 +1,4 @@
+%Trains the coarse network independently
 clc; close all; clear variables; 
 %%
 [trainCombined, valCombined] = ReadDIODEToDatastore("images\train\indoors\");
@@ -5,13 +6,7 @@ clc; close all; clear variables;
 lgraph = pipeline2();
 inputSize = lgraph.Layers(1).InputSize;
 coarseGraph = lgraph.Layers(1:17);
-% a = alexnet;
-% alexnetTransfer = a.Layers(1:end-3);
-% layers = [alexnetTransfer
-%           fullyConnectedLayer(3249,'Name','FC 2')
-%           reshapeLayer('reshape 1')
-%           SIERegressionLayer("SIE")];
-
+%add a regression layer so we can calculate loss
 layers = [ coarseGraph
           SIERegressionLayer("SIE")];
 %%
@@ -27,6 +22,7 @@ options = trainingOptions("adam", ...
 
 net = trainNetwork(trainCombined,layers,options);
 %%
+%lower the learning rate after the first time through
 options = trainingOptions("adam", ...
     'MiniBatchSize',32, ...
     'MaxEpochs',4, ...
@@ -37,9 +33,11 @@ options = trainingOptions("adam", ...
     'Verbose', false, ...
     'Plots','training-progress');
 
+% using a for loop because I'm not sure if the data augmentation only runs
+% when you load the images or each time the image is accessed--either way
+% this will get more randomized data
 for i=1:3
     [trainCombined, valCombined] = ReadDIODEToDatastore("images\train\indoors\");
     net = trainNetwork(trainCombined,net.layerGraph,options);
 end
-% 
-% save("coarseNet3.mat",'net');
+

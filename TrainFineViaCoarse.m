@@ -5,27 +5,19 @@ clc;
 close all; 
 clear variables; 
 
-%%
-%load in the training datasets
+%% load in the training datasets
 [trainCombined, valCombined] = ReadDIODEforCombined("images\train\indoors\");
 
-%%
-%Load in the preexisting and pretrained networks
-load('Fine Network 5.mat');
+%% Load in the preexisting and pretrained networks
+load('Trained Networks\Fine Network 5.mat');
 fineNet = net;
-load('Transfer Learning Via Alexnet 2.mat');
+load('Trained Networks\Transfer Learning Via Alexnet 2.mat');
 coarseNet = net;
 
-%%
+%% Construct Layers, Freeze Coarse Net Weights
 lgraph = layerGraph;
 lgraph = addLayers(lgraph, freezeWeights(coarseNet.Layers(1:end-1)));
 lgraph = addLayers(lgraph, fineNet.Layers(1:8));
-
-
-
-%%
-% lgraph = connectLayers(lgraph, 'input', 'Fine 1');
-% lgraph = connectLayers(lgraph, 'reshape 1', 'Fine 2, Concat/in2');
 
 
 lgraph = connectLayers(lgraph, 'resize227', 'Fine 1');
@@ -33,7 +25,7 @@ lgraph = connectLayers(lgraph, 'resize-output-size', 'Fine 2, Concat/in2');
 analyzeNetwork(lgraph);
 
 
-%%
+%% Train Network
 options = trainingOptions("adam", ...
     'MiniBatchSize',32, ...
     'MaxEpochs',6, ...
@@ -49,11 +41,11 @@ save("Combined Network 3 - Fine Training On Coarse Alexnet",'net');
 
 
 
-%%
+%% Predict Validation set for pretty images
 YPred = squeeze(predict(net,valCombined));
 
 
-%%
+%% Plot Validation Set Images
 
 limit = 10;
 for index = 20:limit

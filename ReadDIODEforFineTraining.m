@@ -1,10 +1,15 @@
+
+
 function [trainCombined, valCombined] = ReadDIODEforFineTraining(relativePath)
+%% Function for reading in DIODE images and depths, as well as a psuedo course input to the system
+
+    %Read each into the datastore with a custom function for each
     inputDataImages = imageDatastore(relativePath,"ReadFcn", @loadImage,"IncludeSubfolders",true);
     inputDataDepths = imageDatastore(relativePath, 'ReadFcn',@loadDIODEZDepthBlur,'FileExtensions','.npy',"IncludeSubfolders",true);
     outputDataDepths = imageDatastore(relativePath, 'ReadFcn',@loadDIODEZDepth,'FileExtensions','.npy',"IncludeSubfolders",true);
     
 
-
+    %Split up the  data into train and validation datasets
     n = length(outputDataDepths.Files);
     idx = randperm(n,round(n/5));
 
@@ -17,10 +22,12 @@ function [trainCombined, valCombined] = ReadDIODEforFineTraining(relativePath)
     trainDataDepths = subset(inputDataDepths, idx);
     trainOutputDataDepths = subset(outputDataDepths, idx);
 
-
+    %Make them into combined datastores
     trainCombined = combine(trainDataImages, trainDataDepths,trainOutputDataDepths);
     valCombined = combine(valDataImages, valDataDepths,valOutputDataDepths);
 
+
+    %% Custom reading in functions for depth and images
     function data = loadDIODEZDepth(filename)
         addpath npy-matlab\
         data = readNPY(filename);

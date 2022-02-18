@@ -1,5 +1,6 @@
+%This file runs the network on the test set and calculates thresholds
 clc; close all; clear variables; 
-%%
+%% Load network and test data
 load("combinedNet4.mat");
 testCombined = ReadTestData("images\test");
 
@@ -16,6 +17,8 @@ predictions = zeros(size(out));
 u = 95; %upper precentile for scaling
 l = 100-u; %lower
 
+%Rescale the network output so that 5th and 95th percentile match the
+%ground truth. Save that data in predictions
 for i=1:size(out,3)
     outDepth = out(:,:,i);
     targetmax = prctile(reshape(target_depths(:,:,i),1,[]),u);
@@ -56,9 +59,7 @@ subplot(2,2,2); imagesc(groundTruth); title("Depth Image");colorbar; axis equal;
 
 function [testCombined] = ReadTestData(relativePath)
     inputDataImages = imageDatastore(relativePath,"ReadFcn", @loadImage,"IncludeSubfolders",true);
-%     augDataImages = augmentedImageDatastore([304, 228], inputDataImages);
     inputDataDepths = imageDatastore(relativePath, 'ReadFcn',@loadDIODEZDepth,'FileExtensions','.npy',"IncludeSubfolders",true);
-%     augDataDepths = augmentedImageDatastore([76,57], inputDataDepths);
 
     testCombined = combine(inputDataImages, inputDataDepths);
 

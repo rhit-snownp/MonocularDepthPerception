@@ -1,3 +1,5 @@
+%% In class demo file--reads from webcam and inputs to depth map
+
 clear all
 
 load("combinedNet2.mat")
@@ -9,7 +11,7 @@ img = snapshot(cam);
 
 img = imresize(img, [304 228]);
 
-depth = net.predict(img);
+depth = exp(net.predict(img));
 
 subplot(1,2,1)
 imshow(img);

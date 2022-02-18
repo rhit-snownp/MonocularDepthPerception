@@ -1,4 +1,4 @@
-
+%Same as pipeline1 but uses vertical pooling in the coarse network
 function [lgraph] = pipeline2()
 
 %read in the data 
