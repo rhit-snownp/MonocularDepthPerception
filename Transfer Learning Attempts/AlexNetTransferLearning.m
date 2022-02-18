@@ -10,7 +10,7 @@ clear variables;
 net = alexnet;
 analyzeNetwork(net);
 
-%%
+%%  Define the Modified Network Architecture
 
 %input layer 
 top1 = imageInputLayer([304 228 3],'Name','input'); 
@@ -57,18 +57,18 @@ save("Transfer Learning Via Alexnet 2",'net');
 
 
 
-%%
-load("Transfer Learning Via Alexnet 2.mat")
+%% Testing if network already exists
+load("..\Trained Networks\Transfer Learning Via Alexnet 2.mat")
 [trainCombined, valCombined] = ReadDIODEforCombined("..\images\train\indoors\");
-% testCombined = ReadTestData("images\test");
-YPred = squeeze(predict(net,valCombined));
+[testCombined] = ReadTestData("..\images\test\indoors\");
 
-%%
-reset(valCombined)
+%% Test on Cleaned Testing Set
+YPred = squeeze(predict(net,testCombined));
+reset(testCombined)
 limit = 100;
 for index = 1:limit
 
-    inputImages = read(valCombined);
+    inputImages = read(testCombined);
     figure;
     subplot(2,2,1);
     imshow(inputImages{1});
@@ -93,12 +93,7 @@ end
 
 
 
-%% 
-
-
-
-
-
+%% Function to Read Test Set
 function [testCombined] = ReadTestData(relativePath)
     inputDataImages = imageDatastore(relativePath,"ReadFcn", @loadImage,"IncludeSubfolders",true);
 %     augDataImages = augmentedImageDatastore([304, 228], inputDataImages);

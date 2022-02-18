@@ -6,7 +6,7 @@ close all
 
 
 %Load in the NYU Depth Dataset
-%load('NYU Dataset\nyu_depth_v2_labeled.mat')
+load('NYU Dataset\nyu_depth_v2_labeled.mat')
 
 %%
 % % trainX = images(:,:,:,1:round(1449/2));
@@ -16,6 +16,7 @@ close all
 % newTrainY = repmat(reshape(trainY, size(trainY,1), size(trainY,2), 1, size(trainY,3)), 1, 1, 3, 1);
 % newTestY = repmat(reshape(testY, size(testY,1), size(testY,2), 1, size(testY,3)), 1, 1, 3, 1);
 
+%Read in the input data images
 trainX = imageDatastore("NYU Dataset/Training Data/Input/",'LabelSource','foldernames',"ReadFcn", @loadImage);
 trainY = imageDatastore("NYU Dataset/Training Data/Output/",'LabelSource','foldernames',"ReadFcn", @loadDepthImage);
 testX = imageDatastore("NYU Dataset/Testing Data/Input/",'LabelSource','foldernames',"ReadFcn", @loadImage);
@@ -23,14 +24,16 @@ testY = imageDatastore("NYU Dataset/Testing Data/Output/",'LabelSource','foldern
 
 
 
-
+%Combine the data into a combined datastore
 dsTrain = combine(trainX,trainY);
 dsTest = combine(testX,testY);
 
-
+%Load the pipeline
 [layers] = pipeline1();
 %analyzeNetwork(layers)
 
+
+%train the network
 options = trainingOptions('sgdm', ...
     'MiniBatchSize',128, ...
     'MaxEpochs',30, ...
@@ -45,9 +48,6 @@ options = trainingOptions('sgdm', ...
 net = trainNetwork(dsTrain,layers,options);
 
 
-
-
-YPred = predict(net,dsTest);
 
 
 

@@ -3,6 +3,8 @@ function [inputDataDepths,inputDataImages] = ReadNYUDepthToDatastore(relativePat
 %Load the .mat file, and create testing and training datasets for the
 %system
 
+%Avoid making PNGs for all the .mat stored images
+
 inputDataDepths=fileDatastore((relativePath),'ReadFcn',@loadNYCDepth,'FileExtensions','.mat',"ReadMode","partialfile");
 inputDataImages=fileDatastore((relativePath),'ReadFcn',@loadNYCImage,'FileExtensions','.mat',"ReadMode","partialfile");
 
