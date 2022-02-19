@@ -15,7 +15,7 @@ Deep Learning Toolbox Model for AlexNet Network
 MATLAB Support Package for USB Webcams
 
 
-`testOutput.m` is a MATLAB script that benchmarks an existing neural network with sigma values. It contains detailed instructions on how to run the code.
+`testOutput.m` is a MATLAB script that benchmarks an existing neural network with delta values. It contains detailed instructions on how to run the code.
 
 `cameraDemo.m` is a MATLAB script that takes an existing neural network model
 
